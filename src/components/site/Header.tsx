@@ -188,10 +188,12 @@ export function Header() {
         <div className="container-page grid h-16 grid-cols-[auto_1fr_auto] items-center gap-4 md:h-20">
           <Link to="/" className="flex min-w-0 items-center gap-3">
             <span className="grid size-8 shrink-0 place-items-center bg-primary text-primary-foreground font-display text-lg leading-none">
-              A
+              {COMPANY.name.charAt(0)}
             </span>
             <span className="truncate">
-              <span className="block text-sm font-semibold tracking-[0.14em] uppercase"              </span>
+              <span className="block text-sm font-semibold tracking-[0.14em] uppercase">
+                {COMPANY.name}
+              </span>
               <span className="hidden text-[0.625rem] tracking-[0.14em] uppercase text-muted-foreground lg:block">
                 Office furniture studio
               </span>
