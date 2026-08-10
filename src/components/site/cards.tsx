@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/cart";
 import { formatPrice } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
-import type { Category, Product, Project, Service } from "@/data/catalog";
+import { primaryImage, type Category, type Product, type Project, type Service } from "@/data/catalog";
 
 /* -------------------------------------------------- product */
 
@@ -16,33 +16,46 @@ export function ProductCard({ product }: { product: Product }) {
 
   return (
     <article className="group flex h-full flex-col">
-      <div className="media-frame relative aspect-4/5 rounded-sm">
+      <Link
+        to="/shop/$slug"
+        params={{ slug: product.slug }}
+        className="media-frame relative block aspect-4/5 rounded-sm"
+        aria-label={product.name}
+      >
         <img
-          src={product.image}
+          src={primaryImage(product)}
           alt={product.name}
           loading="lazy"
-          className="group-hover:scale-[1.03]"
+          className="transition-transform duration-500 group-hover:scale-[1.03]"
         />
         <div className="absolute top-3 start-3 flex flex-wrap gap-2">
           <Badge variant={product.condition === "New" ? "clay" : "outline"}>
             {product.condition}
           </Badge>
-          {product.badge ? <Badge variant="outline">{product.badge}</Badge> : null}
+          <Badge variant="outline">{product.availability}</Badge>
         </div>
-        <button
-          type="button"
-          onClick={() => add(product)}
-          aria-label={`Add ${product.name} to cart`}
-          className="absolute bottom-3 end-3 grid size-10 cursor-pointer place-items-center rounded-full bg-background/90 text-foreground opacity-0 shadow-soft transition-all duration-300 hover:bg-primary hover:text-primary-foreground focus-visible:opacity-100 group-hover:opacity-100"
-        >
-          <Plus className="size-4" />
-        </button>
-      </div>
+      </Link>
+
+      <button
+        type="button"
+        onClick={() => add(product)}
+        aria-label={`Add ${product.name} to cart`}
+        className="pointer-events-none absolute grid size-10 place-items-center opacity-0"
+        tabIndex={-1}
+      >
+        <Plus className="size-4" />
+      </button>
 
       <div className="mt-4 flex items-start justify-between gap-4">
         <div className="min-w-0">
-          <h3 className="truncate text-sm font-semibold">{product.name}</h3>
-          <p className="mt-1 truncate text-xs text-muted-foreground">{product.material}</p>
+          <h3 className="truncate text-sm font-semibold">
+            <Link to="/shop/$slug" params={{ slug: product.slug }} className="hover:text-clay">
+              {product.name}
+            </Link>
+          </h3>
+          <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
+            {product.description}
+          </p>
         </div>
         <div className="shrink-0 text-end">
           <p className="text-sm font-semibold tabular-nums">{formatPrice(product.price)}</p>
@@ -70,15 +83,14 @@ export function ProductCard({ product }: { product: Product }) {
           Add to cart
         </Button>
         <Link
-          to="/shop"
-          search={{ category: product.category }}
+          to="/shop/$slug"
+          params={{ slug: product.slug }}
           className="link-underline text-xs text-muted-foreground hover:text-foreground"
         >
           View details
         </Link>
       </div>
     </article>
-
   );
 }
 
