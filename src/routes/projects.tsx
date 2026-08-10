@@ -1,4 +1,5 @@
 import * as React from "react";
+import { COMPANY } from "@/lib/company";
 import { createFileRoute } from "@tanstack/react-router";
 
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
@@ -10,13 +11,13 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/projects")({
   head: () => ({
     meta: [
-      { title: "Office Furnishing Projects & Case Studies | Atelier Works" },
+      { title: `Office Furnishing Projects & Case Studies | ${COMPANY.name}` },
       {
         name: "description",
         content:
-          "Completed corporate offices, executive suites, reception areas, meeting rooms and full workspace projects furnished by Atelier Works.",
+          `Completed corporate offices, executive suites, reception areas, meeting rooms and full workspace projects furnished by ${COMPANY.name}.`,
       },
-      { property: "og:title", content: "Projects | Atelier Works" },
+      { property: "og:title", content: `Projects | ${COMPANY.name}` },
       {
         property: "og:description",
         content: "Selected office furnishing projects across corporate, executive and reception spaces.",

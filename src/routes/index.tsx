@@ -34,7 +34,7 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Atelier Works — Office Furniture & Complete Workspace Solutions" },
+      { title: `${COMPANY.name} — Office Furniture & Complete Workspace Solutions` },
       {
         name: "description",
         content:
@@ -42,7 +42,7 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:title",
-        content: "Atelier Works — Office Furniture & Complete Workspace Solutions",
+        content: `${COMPANY.name} — Office Furniture & Complete Workspace Solutions`,
       },
       {
         property: "og:description",

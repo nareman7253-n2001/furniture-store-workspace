@@ -1,5 +1,9 @@
+/**
+ * Single source of truth for company / site configuration.
+ * Change these values to rebrand the whole site.
+ */
 export const COMPANY = {
-  name: "Atelier Works",
+  name: "Officeline",
   tagline: "Office furniture & complete workspace solutions",
   phone: "+972 52-905-6909",
   whatsapp: "972529056909",
@@ -9,6 +13,6 @@ export const COMPANY = {
   hours: "Mon–Fri, 9:00–18:00",
 };
 
-export function whatsappLink(message = "Hello Atelier Works, I'd like to discuss an office project.") {
+export function whatsappLink(message = `Hello ${COMPANY.name}, I'd like to discuss an office project.`) {
   return `https://wa.me/${COMPANY.whatsapp}?text=${encodeURIComponent(message)}`;
 }

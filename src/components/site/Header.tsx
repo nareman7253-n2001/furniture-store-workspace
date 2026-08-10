@@ -137,7 +137,7 @@ function SearchDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (v:
               className="flex items-center gap-4 rounded-xs px-3 py-2.5 transition-colors hover:bg-accent"
             >
               <div className="media-frame size-11 shrink-0 rounded-xs">
-                <img src={p.image} alt="" loading="lazy" />
+                <img src={p.images[0]} alt="" loading="lazy" />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium">{p.name}</p>
@@ -188,11 +188,11 @@ export function Header() {
         <div className="container-page grid h-16 grid-cols-[auto_1fr_auto] items-center gap-4 md:h-20">
           <Link to="/" className="flex min-w-0 items-center gap-3">
             <span className="grid size-8 shrink-0 place-items-center bg-primary text-primary-foreground font-display text-lg leading-none">
-              A
+              {COMPANY.name.charAt(0)}
             </span>
             <span className="truncate">
               <span className="block text-sm font-semibold tracking-[0.14em] uppercase">
-                Atelier Works
+                {COMPANY.name}
               </span>
               <span className="hidden text-[0.625rem] tracking-[0.14em] uppercase text-muted-foreground lg:block">
                 Office furniture studio

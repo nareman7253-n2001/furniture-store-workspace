@@ -21,7 +21,7 @@ export function getDirection(locale: Locale): "ltr" | "rtl" {
   return LOCALE_META[locale].dir;
 }
 
-export const CURRENCY = "USD";
+export const CURRENCY = "ILS";
 
 export function formatPrice(value: number, locale: Locale = DEFAULT_LOCALE) {
   return new Intl.NumberFormat(locale === "en" ? "en-US" : locale, {

@@ -9,13 +9,13 @@ import { COMPANY, whatsappLink } from "@/lib/company";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact Atelier Works — Office Furniture Enquiries" },
+      { title: `Contact ${COMPANY.name} — Office Furniture Enquiries` },
       {
         name: "description",
         content:
           "Talk to a workspace consultant about office furniture, furnishing projects, installation or clearance. Reply within one working day.",
       },
-      { property: "og:title", content: "Contact Atelier Works" },
+      { property: "og:title", content: `Contact ${COMPANY.name}` },
       {
         property: "og:description",
         content: "Send a brief or message us on WhatsApp — we reply within one working day.",
