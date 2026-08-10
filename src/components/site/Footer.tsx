@@ -101,6 +101,16 @@ export function Footer() {
                   {COMPANY.email}
                 </a>
               </p>
+              <p>
+                <a
+                  href={COMPANY.facebook}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-foreground"
+                >
+                  Facebook
+                </a>
+              </p>
               <p>{COMPANY.hours}</p>
             </address>
           </div>
