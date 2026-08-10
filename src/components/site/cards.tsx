@@ -13,10 +13,9 @@ import type { Category, Product, Project, Service } from "@/data/catalog";
 
 export function ProductCard({ product }: { product: Product }) {
   const { add } = useCart();
-  const [quickView, setQuickView] = React.useState(false);
 
   return (
-    <article className="group flex flex-col">
+    <article className="group flex h-full flex-col">
       <div className="media-frame relative aspect-4/5 rounded-sm">
         <img
           src={product.image}
@@ -24,11 +23,12 @@ export function ProductCard({ product }: { product: Product }) {
           loading="lazy"
           className="group-hover:scale-[1.03]"
         />
-        {product.badge ? (
-          <div className="absolute top-3 start-3">
-            <Badge variant={product.badge === "New" ? "clay" : "outline"}>{product.badge}</Badge>
-          </div>
-        ) : null}
+        <div className="absolute top-3 start-3 flex flex-wrap gap-2">
+          <Badge variant={product.condition === "New" ? "clay" : "outline"}>
+            {product.condition}
+          </Badge>
+          {product.badge ? <Badge variant="outline">{product.badge}</Badge> : null}
+        </div>
         <button
           type="button"
           onClick={() => add(product)}
@@ -54,17 +54,28 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
       </div>
 
-      <div className="mt-3 flex items-center gap-3">
+      <p className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
+        <span
+          aria-hidden
+          className={cn(
+            "size-1.5 rounded-full",
+            product.availability === "In stock" ? "bg-clay" : "bg-muted-foreground/50",
+          )}
+        />
+        {product.availability} · {product.lead}
+      </p>
+
+      <div className="mt-4 flex items-center gap-4">
         <Button size="sm" variant="outline" onClick={() => add(product)}>
           Add to cart
         </Button>
-        <button
-          type="button"
-          onClick={() => setQuickView((v) => !v)}
+        <Link
+          to="/shop"
+          search={{ category: product.category }}
           className="link-underline text-xs text-muted-foreground hover:text-foreground"
         >
-          {quickView ? "Hide details" : "Details"}
-        </button>
+          View details
+        </Link>
       </div>
 
       {quickView ? (
