@@ -91,6 +91,9 @@ export interface Product {
   material: string;
   colorways: string[];
   badge?: "New" | "Best seller" | "Made to order" | "In stock";
+  /** Stock condition — the business sells both new and professionally refurbished pieces. */
+  condition: "New" | "Used";
+  availability: "In stock" | "Low stock" | "Made to order";
   lead: string;
   image: string;
   gallery: string[];
@@ -107,6 +110,8 @@ export const products: Product[] = [
     material: "Solid oak / powder-coated steel",
     colorways: ["Natural oak", "Smoked oak", "Graphite"],
     badge: "Best seller",
+    condition: "New",
+    availability: "In stock",
     lead: "Ships in 2 weeks",
     image: deskImg,
     gallery: [deskImg, heroImg, meetingImg],
@@ -121,6 +126,8 @@ export const products: Product[] = [
     material: "Recycled mesh / cast aluminium",
     colorways: ["Charcoal", "Bone", "Clay"],
     badge: "In stock",
+    condition: "New",
+    availability: "In stock",
     lead: "Ships in 3 days",
     image: chairImg,
     gallery: [chairImg, heroImg, receptionImg],
@@ -135,6 +142,8 @@ export const products: Product[] = [
     material: "Walnut veneer / bronzed steel",
     colorways: ["Walnut", "Ebony"],
     badge: "Made to order",
+    condition: "New",
+    availability: "Made to order",
     lead: "6–8 weeks",
     image: executiveImg,
     gallery: [executiveImg, heroImg, meetingImg],
@@ -149,6 +158,8 @@ export const products: Product[] = [
     material: "Composite stone / oak veneer",
     colorways: ["Bone stone", "Grey stone"],
     badge: "Made to order",
+    condition: "New",
+    availability: "Made to order",
     lead: "8 weeks",
     image: receptionImg,
     gallery: [receptionImg, heroImg],
@@ -163,6 +174,8 @@ export const products: Product[] = [
     material: "Oak veneer / steel plinth",
     colorways: ["Natural oak", "Fumed oak"],
     badge: "New",
+    condition: "New",
+    availability: "Low stock",
     lead: "5 weeks",
     image: meetingImg,
     gallery: [meetingImg, heroImg],
@@ -176,6 +189,8 @@ export const products: Product[] = [
     price: 2380,
     material: "Laminate / PET acoustic felt",
     colorways: ["Bone", "Clay", "Graphite"],
+    condition: "Used",
+    availability: "In stock",
     lead: "4 weeks",
     image: heroImg,
     gallery: [heroImg, meetingImg],
@@ -191,6 +206,8 @@ export const products: Product[] = [
     material: "Laminate / steel beam frame",
     colorways: ["Oak / graphite", "Bone / bone"],
     badge: "Best seller",
+    condition: "Used",
+    availability: "Low stock",
     lead: "3 weeks",
     image: deskImg,
     gallery: [deskImg, heroImg],
@@ -205,6 +222,8 @@ export const products: Product[] = [
     material: "Aluminium",
     colorways: ["Black", "Silver"],
     badge: "In stock",
+    condition: "New",
+    availability: "In stock",
     lead: "Ships in 3 days",
     image: chairImg,
     gallery: [chairImg],
