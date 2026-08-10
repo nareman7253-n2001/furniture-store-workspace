@@ -1,3 +1,4 @@
+import { COMPANY } from "@/lib/company";
 import { createFileRoute } from "@tanstack/react-router";
 
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
@@ -17,13 +18,13 @@ const process = [
 export const Route = createFileRoute("/services")({
   head: () => ({
     meta: [
-      { title: "Office Furnishing & Workspace Planning Services | Atelier Works" },
+      { title: `Office Furnishing & Workspace Planning Services | ${COMPANY.name}` },
       {
         name: "description",
         content:
           "Complete office furnishing, workspace planning, delivery and installation, and office clearance — delivered under one contract.",
       },
-      { property: "og:title", content: "Workspace Services | Atelier Works" },
+      { property: "og:title", content: `Workspace Services | ${COMPANY.name}` },
       {
         property: "og:description",
         content: "Planning, furnishing, installation and clearance for commercial workspaces.",

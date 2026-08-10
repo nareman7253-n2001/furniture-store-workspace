@@ -8,6 +8,7 @@ import { ProductGallery } from "@/components/site/ProductGallery";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getCategory, getProductBySlug, relatedProducts } from "@/lib/catalog";
+import type { Product } from "@/data/catalog";
 import { COMPANY, whatsappLink } from "@/lib/company";
 import { useCart } from "@/lib/cart";
 import { formatPrice } from "@/lib/i18n";
@@ -57,7 +58,7 @@ export const Route = createFileRoute("/shop/$slug")({
 });
 
 function ProductDetail() {
-  const { product } = Route.useLoaderData();
+  const { product } = Route.useLoaderData() as { product: Product };
   const { add } = useCart();
   const category = getCategory(product.category);
   const related = relatedProducts(product, 3);

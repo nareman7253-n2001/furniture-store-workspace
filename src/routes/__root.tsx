@@ -87,13 +87,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Atelier Works — Office Furniture & Workspace Solutions" },
+      { title: `${COMPANY.name} — Office Furniture & Workspace Solutions` },
       {
         name: "description",
         content:
           "Premium office furniture, workspace planning, delivery and installation for corporate offices, executive suites and reception areas.",
       },
-      { name: "author", content: "Atelier Works" },
+      { name: "author", content: `${COMPANY.name}` },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
