@@ -137,7 +137,7 @@ function SearchDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (v:
               className="flex items-center gap-4 rounded-xs px-3 py-2.5 transition-colors hover:bg-accent"
             >
               <div className="media-frame size-11 shrink-0 rounded-xs">
-                <img src={p.image} alt="" loading="lazy" />
+                <img src={p.images[0]} alt="" loading="lazy" />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium">{p.name}</p>
@@ -191,9 +191,7 @@ export function Header() {
               A
             </span>
             <span className="truncate">
-              <span className="block text-sm font-semibold tracking-[0.14em] uppercase">
-                Atelier Works
-              </span>
+              <span className="block text-sm font-semibold tracking-[0.14em] uppercase"              </span>
               <span className="hidden text-[0.625rem] tracking-[0.14em] uppercase text-muted-foreground lg:block">
                 Office furniture studio
               </span>

@@ -55,7 +55,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         }
         return [
           ...prev,
-          { id: product.id, name: product.name, price: product.price, image: product.image, qty },
+          { id: product.id, name: product.name, price: product.price, image: product.images[0] ?? "", qty },
         ];
       });
       toast.success("Added to cart", { description: product.name });
