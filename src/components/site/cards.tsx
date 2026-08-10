@@ -36,15 +36,7 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
       </Link>
 
-      <button
-        type="button"
-        onClick={() => add(product)}
-        aria-label={`Add ${product.name} to cart`}
-        className="pointer-events-none absolute grid size-10 place-items-center opacity-0"
-        tabIndex={-1}
-      >
-        <Plus className="size-4" />
-      </button>
+
 
       <div className="mt-4 flex items-start justify-between gap-4">
         <div className="min-w-0">
