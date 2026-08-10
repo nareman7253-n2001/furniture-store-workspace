@@ -4,6 +4,8 @@ import executiveImg from "@/assets/cat-executive.jpg";
 import receptionImg from "@/assets/project-reception.jpg";
 import meetingImg from "@/assets/project-meeting.jpg";
 import heroImg from "@/assets/hero-office.jpg";
+import storageImg from "@/assets/cat-storage.jpg";
+import completeOfficeImg from "@/assets/complete-office.jpg";
 
 export type CategorySlug =
   | "office-desks"
@@ -56,7 +58,7 @@ export const categories: Category[] = [
     slug: "storage-cabinets",
     name: "Storage & Cabinets",
     description: "Pedestals, lockers and acoustic storage walls.",
-    image: heroImg,
+    image: storageImg,
     count: 27,
   },
   {
@@ -192,8 +194,8 @@ export const products: Product[] = [
     condition: "Used",
     availability: "In stock",
     lead: "4 weeks",
-    image: heroImg,
-    gallery: [heroImg, meetingImg],
+    image: storageImg,
+    gallery: [storageImg, meetingImg],
     description:
       "A room-dividing storage system with acoustic backing that lowers reverberation in open-plan floors.",
   },
@@ -209,8 +211,8 @@ export const products: Product[] = [
     condition: "Used",
     availability: "Low stock",
     lead: "3 weeks",
-    image: deskImg,
-    gallery: [deskImg, heroImg],
+    image: completeOfficeImg,
+    gallery: [completeOfficeImg, heroImg],
     description:
       "A four-desk bench with beam-routed power, modesty screens and a footprint tuned for 1.4m spans.",
   },
