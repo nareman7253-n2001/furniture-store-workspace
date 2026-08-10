@@ -5,7 +5,7 @@ export const COMPANY = {
   whatsapp: "972529056909",
   email: "m0529056909@gmail.com",
   facebook: "https://facebook.com/profile.php?id=100055115784827",
-  address: "1240 Warehouse Row, Suite 300, San Francisco, CA",
+  address: "סימטת הבוקרים 6, 4922297",
   hours: "Mon–Fri, 9:00–18:00",
 };
 
