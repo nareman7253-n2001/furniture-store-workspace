@@ -77,13 +77,8 @@ export function ProductCard({ product }: { product: Product }) {
           View details
         </Link>
       </div>
-
-      {quickView ? (
-        <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-          {product.description} <span className="text-foreground">{product.lead}.</span>
-        </p>
-      ) : null}
     </article>
+
   );
 }
 
