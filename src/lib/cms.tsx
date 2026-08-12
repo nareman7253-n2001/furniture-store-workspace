@@ -38,7 +38,9 @@ export interface CmsData {
   projects: Project[];
 }
 
-type Row = Record<string, any>;
+// Loose row shape: generated DB types are indexed, so we normalise here.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Row = any;
 
 /* -------------------------------------------------- helpers */
 
@@ -170,7 +172,6 @@ function localize(raw: CmsRaw, locale: Locale): CmsData {
     products: products.length ? products : FALLBACK.products,
     services: services.length ? services : FALLBACK.services,
     projects: projects.length ? projects : FALLBACK.projects,
-    ...(products.length ? {} : {}),
   };
 }
 
