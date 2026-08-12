@@ -37,31 +37,31 @@ export const SORT_OPTIONS: { value: SortKey; label: string }[] = [
 export const CONDITIONS = ["New", "Used"] as const;
 export const AVAILABILITIES = ["In stock", "Made to order"] as const;
 
-export function listCategories(): Category[] {
-  return categories;
+export function listCategories(list: Category[] = categories): Category[] {
+  return list;
 }
 
-export function getCategory(slug?: string): Category | undefined {
-  return categories.find((c) => c.slug === slug);
+export function getCategory(slug?: string, list: Category[] = categories): Category | undefined {
+  return list.find((c) => c.slug === slug);
 }
 
-export function getProductBySlug(slug: string): Product | undefined {
-  return products.find((p) => p.slug === slug);
+export function getProductBySlug(slug: string, list: Product[] = products): Product | undefined {
+  return list.find((p) => p.slug === slug);
 }
 
-export function relatedProducts(product: Product, limit = 4): Product[] {
-  return products
+export function relatedProducts(product: Product, limit = 4, list: Product[] = products): Product[] {
+  return list
     .filter((p) => p.id !== product.id && p.category === product.category)
-    .concat(products.filter((p) => p.id !== product.id && p.category !== product.category))
+    .concat(list.filter((p) => p.id !== product.id && p.category !== product.category))
     .slice(0, limit);
 }
 
-export function priceBounds(): { min: number; max: number } {
-  const values = products.map((p) => p.price);
+export function priceBounds(list: Product[] = products): { min: number; max: number } {
+  const values = list.length ? list.map((p) => p.price) : [0];
   return { min: Math.min(...values), max: Math.max(...values) };
 }
 
-export function queryProducts(query: ProductQuery = {}): Product[] {
+export function queryProducts(query: ProductQuery = {}, list: Product[] = products): Product[] {
   const {
     search = "",
     category,
@@ -74,7 +74,7 @@ export function queryProducts(query: ProductQuery = {}): Product[] {
 
   const term = search.trim().toLowerCase();
 
-  let list = products.filter((p) => {
+  let result = list.filter((p) => {
     if (category && p.category !== category) return false;
     if (conditions.length && !conditions.includes(p.condition)) return false;
     if (availabilities.length && !availabilities.includes(p.availability)) return false;
@@ -89,24 +89,24 @@ export function queryProducts(query: ProductQuery = {}): Product[] {
     return true;
   });
 
-  list = [...list];
+  result = [...result];
   switch (sort) {
     case "price-asc":
-      list.sort((a, b) => a.price - b.price);
+      result.sort((a, b) => a.price - b.price);
       break;
     case "price-desc":
-      list.sort((a, b) => b.price - a.price);
+      result.sort((a, b) => b.price - a.price);
       break;
     case "name-asc":
-      list.sort((a, b) => a.name.localeCompare(b.name));
+      result.sort((a, b) => a.name.localeCompare(b.name));
       break;
     case "newest":
-      list.sort((a, b) => b.addedAt.localeCompare(a.addedAt));
+      result.sort((a, b) => b.addedAt.localeCompare(a.addedAt));
       break;
     default:
-      list.sort((a, b) => Number(b.featured) - Number(a.featured));
+      result.sort((a, b) => Number(b.featured) - Number(a.featured));
   }
-  return list;
+  return result;
 }
 
 export function isCategorySlug(value: unknown): value is CategorySlug {
