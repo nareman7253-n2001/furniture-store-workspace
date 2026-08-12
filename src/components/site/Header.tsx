@@ -9,7 +9,6 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useCart } from "@/lib/cart";
 import { COMPANY, whatsappLink } from "@/lib/company";
 import { formatPrice, LOCALES, LOCALE_META, useLocale } from "@/lib/i18n";
-import { useCms } from "@/lib/cms";
 import { categories, products } from "@/data/catalog";
 import { cn } from "@/lib/utils";
 
