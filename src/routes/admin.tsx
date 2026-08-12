@@ -388,21 +388,30 @@ function AdminPage() {
   async function saveRow(table: string, pk: string, draft: Record<string, any>) {
     const { [pk]: id, ...payload } = draft;
     const { error } = await supabase.from(table as never).update(payload as never).eq(pk, id);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     toast.success("Saved");
     refresh();
   }
 
   async function insertRow(table: string, blank: Record<string, any>) {
     const { error } = await supabase.from(table as never).insert(blank as never);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     toast.success("Added");
     refresh();
   }
 
   async function deleteRow(table: string, pk: string, id: any) {
     const { error } = await supabase.from(table as never).delete().eq(pk, id);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     toast.success("Deleted");
     refresh();
   }
@@ -447,7 +456,10 @@ function AdminPage() {
                 const { error } = await supabase
                   .from("site_settings")
                   .upsert({ ...draft, id: true } as never);
-                if (error) return toast.error(error.message);
+                if (error) {
+      toast.error(error.message);
+      return;
+    }
                 toast.success("Saved");
                 refresh();
               }}
