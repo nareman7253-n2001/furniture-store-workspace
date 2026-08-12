@@ -141,6 +141,11 @@ export function Footer() {
           </div>
         </div>
       </div>
+      <div className="container-page pb-6 text-xs text-muted-foreground">
+        <Link to="/admin" className="hover:text-foreground">
+          Control panel
+        </Link>
+      </div>
     </footer>
   );
 }
