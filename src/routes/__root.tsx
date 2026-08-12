@@ -17,7 +17,8 @@ import { Footer } from "@/components/site/Footer";
 import { WhatsAppFab } from "@/components/site/WhatsAppFab";
 import { Toaster } from "@/components/ui/sonner";
 import { CartProvider } from "@/lib/cart";
-import { DEFAULT_LOCALE, getDirection } from "@/lib/i18n";
+import { DEFAULT_LOCALE, getDirection, LocaleProvider } from "@/lib/i18n";
+import { CmsProvider } from "@/lib/cms";
 
 function NotFoundComponent() {
   return (
@@ -134,6 +135,8 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <LocaleProvider>
+      <CmsProvider>
       <CartProvider>
         <div className="flex min-h-screen flex-col">
           <Header />
@@ -146,6 +149,8 @@ function RootComponent() {
           <Toaster position="bottom-center" />
         </div>
       </CartProvider>
+      </CmsProvider>
+      </LocaleProvider>
     </QueryClientProvider>
   );
 }

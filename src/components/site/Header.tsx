@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Menu, MessageCircle, Search, ShoppingBag, X, Minus, Plus, Trash2 } from "lucide-react";
+import { Menu, MessageCircle, Search, ShoppingBag, X, Minus, Plus, Trash2, Globe } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,7 +8,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useCart } from "@/lib/cart";
 import { COMPANY, whatsappLink } from "@/lib/company";
-import { formatPrice } from "@/lib/i18n";
+import { formatPrice, LOCALES, LOCALE_META, useLocale } from "@/lib/i18n";
 import { categories, products } from "@/data/catalog";
 import { cn } from "@/lib/utils";
 
@@ -154,6 +154,30 @@ function SearchDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (v:
   );
 }
 
+function LanguageSwitcher() {
+  const { locale, setLocale, t } = useLocale();
+  return (
+    <div className="relative">
+      <label className="sr-only" htmlFor="locale-select">
+        {t("lang.label")}
+      </label>
+      <Globe className="pointer-events-none absolute start-2 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+      <select
+        id="locale-select"
+        value={locale}
+        onChange={(e) => setLocale(e.target.value as typeof locale)}
+        className="h-10 cursor-pointer appearance-none rounded-sm bg-transparent ps-7 pe-2 text-xs font-semibold uppercase tracking-[0.1em] outline-none hover:bg-accent"
+      >
+        {LOCALES.map((l) => (
+          <option key={l} value={l}>
+            {LOCALE_META[l].native}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
 export function Header() {
   const { count, open, setOpen } = useCart();
   const [menuOpen, setMenuOpen] = React.useState(false);
@@ -216,6 +240,8 @@ export function Header() {
           </nav>
 
           <div className="flex items-center justify-end gap-1">
+            <LanguageSwitcher />
+
             <button
               type="button"
               aria-label="Search"
@@ -293,6 +319,15 @@ export function Header() {
                       </Link>
                     ))}
                   </nav>
+                  <div className="mt-8">
+                    <Link
+                      to="/admin"
+                      onClick={() => setMenuOpen(false)}
+                      className="text-xs uppercase tracking-[0.12em] text-muted-foreground hover:text-foreground"
+                    >
+                      Control panel
+                    </Link>
+                  </div>
                   <div className="mt-8">
                     <p className="eyebrow">Shop by category</p>
                     <div className="mt-3 flex flex-wrap gap-2">
