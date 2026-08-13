@@ -91,19 +91,8 @@ export type CmsRaw = Awaited<ReturnType<typeof fetchCmsRaw>>;
 
 export const CMS_QUERY_KEY = ["cms"] as const;
 
-function localize(raw: CmsRaw, locale: Locale): CmsData {
-  const activeCategories = raw.categories.filter((c) => c.active);
-  const activeProducts = raw.products.filter((p) => p.active);
-
-  const categories: Category[] = activeCategories.map((c) => ({
-    slug: c.slug,
-    name: pick(c, "name", locale),
-    description: pick(c, "description", locale),
-    image: resolveImage(c.image),
-    count: activeProducts.filter((p) => p.category_slug === c.slug).length,
-  })) as Category[];
-
-  const products: Product[] = activeProducts.map((p) => ({
+export function localizeProduct(p: Row, locale: Locale): Product {
+  return {
     id: p.id,
     slug: p.slug,
     category: p.category_slug,
@@ -124,7 +113,23 @@ function localize(raw: CmsRaw, locale: Locale): CmsData {
     badge: p.badge ?? undefined,
     lead: pick(p, "lead", locale),
     addedAt: (p.created_at ?? "").slice(0, 10),
-  })) as Product[];
+  } as Product;
+}
+
+function localize(raw: CmsRaw, locale: Locale): CmsData {
+  const activeCategories = raw.categories.filter((c) => c.active);
+  const activeProducts = raw.products.filter((p) => p.active);
+
+  const categories: Category[] = activeCategories.map((c) => ({
+    slug: c.slug,
+    name: pick(c, "name", locale),
+    description: pick(c, "description", locale),
+    image: resolveImage(c.image),
+    count: activeProducts.filter((p) => p.category_slug === c.slug).length,
+  })) as Category[];
+
+  const products: Product[] = activeProducts.map((p) => localizeProduct(p, locale));
+
 
   const services: Service[] = raw.services
     .filter((s) => s.active)
