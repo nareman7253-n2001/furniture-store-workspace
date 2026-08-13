@@ -316,18 +316,23 @@ function Home() {
 /* -------------------------------------------------- sections */
 
 function Hero() {
+  const eyebrow = useText("home.hero.eyebrow", "Office Furniture & Workspace Solutions");
+  const title = useText("home.hero.title", "Equip Your Workspace. Elevate Your Business.");
+  const subtitle = useText(
+    "home.hero.subtitle",
+    "Premium office furniture and complete workspace solutions designed for modern businesses.",
+  );
+  const ctaPrimary = useText("home.hero.cta_primary", "Shop Furniture");
+  const ctaSecondary = useText("home.hero.cta_secondary", "Explore Our Projects");
+
   return (
     <section className="relative">
       <div className="container-page grid gap-10 pt-12 pb-14 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-16 lg:pt-16 lg:pb-20">
         <div>
-          <p className="eyebrow">Office Furniture &amp; Workspace Solutions</p>
-          <h1 className="display-xl mt-6 text-balance">
-            Equip Your Workspace.
-            <span className="block italic text-clay">Elevate Your Business.</span>
-          </h1>
+          <p className="eyebrow">{eyebrow}</p>
+          <h1 className="display-xl mt-6 text-balance">{title}</h1>
           <p className="mt-8 max-w-md text-base leading-relaxed text-muted-foreground">
-            Premium office furniture and complete workspace solutions designed for modern
-            businesses.
+            {subtitle}
           </p>
           <div className="mt-10 flex flex-wrap gap-3">
             <Button asChild size="lg">
