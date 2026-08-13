@@ -337,12 +337,12 @@ function Hero() {
           <div className="mt-10 flex flex-wrap gap-3">
             <Button asChild size="lg">
               <Link to="/shop">
-                Shop Furniture
+                {ctaPrimary}
                 <ArrowRight className="size-4 rtl:rotate-180" />
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline">
-              <Link to="/projects">Explore Our Projects</Link>
+              <Link to="/projects">{ctaSecondary}</Link>
             </Button>
           </div>
         </div>
@@ -382,20 +382,28 @@ function ValueStrip() {
 }
 
 function ProjectCTA() {
+  const whatsapp = useWhatsappLink();
+  const eyebrow = useText("cta.eyebrow", "Start a project");
+  const title = useText("cta.title", "Planning a New Office?");
+  const description = useText(
+    "cta.description",
+    "Tell us about your space and let us help you create the right workspace.",
+  );
+
   return (
     <section className="bg-primary text-primary-foreground">
       <div className="container-page section-y">
         <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-end">
           <div>
-            <p className="eyebrow text-primary-foreground/60">Start a project</p>
-            <h2 className="display-lg mt-4 text-balance">Planning a New Office?</h2>
+            <p className="eyebrow text-primary-foreground/60">{eyebrow}</p>
+            <h2 className="display-lg mt-4 text-balance">{title}</h2>
             <p className="mt-6 max-w-xl text-sm leading-relaxed text-primary-foreground/70">
-              Tell us about your space and let us help you create the right workspace.
+              {description}
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
             <Button asChild variant="clay" size="lg">
-              <a href={whatsappLink()} target="_blank" rel="noreferrer">
+              <a href={whatsapp} target="_blank" rel="noreferrer">
                 <MessageCircle className="size-4" />
                 WhatsApp Us
               </a>
