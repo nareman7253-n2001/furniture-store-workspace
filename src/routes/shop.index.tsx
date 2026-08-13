@@ -50,41 +50,49 @@ export const Route = createFileRoute("/shop/")({
 function ShopIndex() {
   const { category, sort, q } = Route.useSearch();
   const navigate = Route.useNavigate();
-  const categories = listCategories();
+  const { categories, products } = useCms();
+  const { price: formatPrice, t } = useLocale();
+
+  const bounds = React.useMemo(() => priceBounds(products), [products]);
 
   const [conditions, setConditions] = React.useState<string[]>([]);
   const [availabilities, setAvailabilities] = React.useState<string[]>([]);
-  const [maxPrice, setMaxPrice] = React.useState(bounds.max);
+  const [maxPrice, setMaxPrice] = React.useState<number | null>(null);
   const [filtersOpen, setFiltersOpen] = React.useState(false);
+
+  const effectiveMax = maxPrice ?? bounds.max;
 
   const setSearch = (next: Partial<ShopSearch>) =>
     navigate({ search: (prev: ShopSearch) => ({ ...prev, ...next }) });
 
   const results = React.useMemo(
     () =>
-      queryProducts({
-        search: q ?? "",
-        category,
-        conditions,
-        availabilities,
-        maxPrice,
-        sort: sort ?? "featured",
-      }),
-    [q, category, conditions, availabilities, maxPrice, sort],
+      queryProducts(
+        {
+          search: q ?? "",
+          category,
+          conditions,
+          availabilities,
+          maxPrice: effectiveMax,
+          sort: sort ?? "featured",
+        },
+        products,
+      ),
+    [q, category, conditions, availabilities, effectiveMax, sort, products],
   );
 
-  const active = getCategory(category);
+  const active = getCategory(category, categories);
   const filtersDirty =
     Boolean(category) ||
     Boolean(q) ||
     conditions.length > 0 ||
     availabilities.length > 0 ||
-    maxPrice !== bounds.max;
+    maxPrice !== null;
 
   const resetFilters = () => {
     setConditions([]);
     setAvailabilities([]);
-    setMaxPrice(bounds.max);
+    setMaxPrice(null);
     navigate({ search: {} });
   };
 
@@ -93,18 +101,23 @@ function ShopIndex() {
 
   const filterPanel = (
     <FilterPanel
+      categories={categories}
+      bounds={bounds}
+      formatPrice={formatPrice}
+      label={t("shop.filters")}
       category={category}
       onCategory={(value) => setSearch({ category: value })}
       conditions={conditions}
       onCondition={(value) => toggle(conditions, value, setConditions)}
       availabilities={availabilities}
       onAvailability={(value) => toggle(availabilities, value, setAvailabilities)}
-      maxPrice={maxPrice}
+      maxPrice={effectiveMax}
       onMaxPrice={setMaxPrice}
       onReset={resetFilters}
       dirty={filtersDirty}
     />
   );
+
 
   return (
     <>
