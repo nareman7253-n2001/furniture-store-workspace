@@ -270,6 +270,10 @@ function ShopIndex() {
 /* -------------------------------------------------- filter panel */
 
 function FilterPanel({
+  categories,
+  bounds,
+  formatPrice,
+  label,
   category,
   onCategory,
   conditions,
@@ -281,6 +285,10 @@ function FilterPanel({
   onReset,
   dirty,
 }: {
+  categories: Category[];
+  bounds: { min: number; max: number };
+  formatPrice: (value: number) => string;
+  label: string;
   category?: string | undefined;
   onCategory: (value: string | undefined) => void;
   conditions: string[];
@@ -295,7 +303,7 @@ function FilterPanel({
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between gap-4">
-        <p className="eyebrow">Filters</p>
+        <p className="eyebrow">{label}</p>
         {dirty ? (
           <button
             type="button"
@@ -313,7 +321,7 @@ function FilterPanel({
           checked={!category}
           onChange={() => onCategory(undefined)}
         />
-        {listCategories().map((c) => (
+        {categories.map((c) => (
           <FilterOption
             key={c.slug}
             label={c.name}
