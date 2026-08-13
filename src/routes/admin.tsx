@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Plus, Trash2, Loader2 } from "lucide-react";
@@ -345,12 +345,17 @@ function RecordForm({
 
 function AdminPage() {
   const { loading, session, isAdmin, signOut } = useAuth();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({ queryKey: CMS_QUERY_KEY, queryFn: fetchCmsRaw });
 
   const refresh = () => queryClient.invalidateQueries({ queryKey: CMS_QUERY_KEY });
 
-  if (loading) {
+  React.useEffect(() => {
+    if (!loading && !session) navigate({ to: "/auth", replace: true });
+  }, [loading, session, navigate]);
+
+  if (loading || !session) {
     return (
       <div className="container-page section-y flex justify-center">
         <Loader2 className="size-5 animate-spin text-muted-foreground" />
@@ -358,17 +363,6 @@ function AdminPage() {
     );
   }
 
-  if (!session) {
-    return (
-      <div className="container-page section-y">
-        <h1 className="display-md">Control panel</h1>
-        <p className="mt-3 text-sm text-muted-foreground">Sign in to manage the site.</p>
-        <Button asChild className="mt-6">
-          <Link to="/auth">Sign in</Link>
-        </Button>
-      </div>
-    );
-  }
 
   if (!isAdmin) {
     return (

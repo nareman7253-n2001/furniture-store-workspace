@@ -12,9 +12,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { services } from "@/data/catalog";
+import { useCms } from "@/lib/cms";
 
 export function ContactForm() {
+  const { services } = useCms();
   const [interest, setInterest] = React.useState(services[0]?.slug ?? "office-furnishing");
   const [submitting, setSubmitting] = React.useState(false);
 

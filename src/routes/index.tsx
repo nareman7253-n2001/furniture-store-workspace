@@ -27,8 +27,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { categories, products, projects, services } from "@/data/catalog";
-import { COMPANY, whatsappLink } from "@/lib/company";
+import { useCms, useCompany, useText, useWhatsappLink } from "@/lib/cms";
+import { COMPANY } from "@/lib/company";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
@@ -63,14 +63,8 @@ const valueStrip = [
   { icon: Recycle, label: "New & Used Options" },
 ];
 
-const featuredIds = [
-  "regent-executive-desk",
-  "atlas-task-chair",
-  "grid-bench-workstation",
-  "quarry-reception-counter",
-  "assembly-conference-table",
-  "stack-storage-wall",
-];
+const FEATURED_LIMIT = 6;
+
 
 const serviceIcons: Record<string, typeof Ruler> = {
   "office-furnishing": LayoutGrid,
@@ -112,11 +106,28 @@ const benefits = [
 /* -------------------------------------------------- page */
 
 function Home() {
-  const featured = featuredIds
-    .map((id) => products.find((p) => p.id === id))
-    .filter((p): p is (typeof products)[number] => Boolean(p));
+  const { categories, products, projects, services } = useCms();
+  const featuredPool = products.filter((p) => p.featured);
+  const featured = (featuredPool.length ? featuredPool : products).slice(0, FEATURED_LIMIT);
   const homeCategories = categories.slice(0, 6);
   const homeProjects = projects.slice(0, 3);
+
+  const categoriesEyebrow = useText("home.categories.eyebrow", "Shop by category");
+  const categoriesTitle = useText("home.categories.title", "Find the Right Furniture for Your Workspace");
+  const featuredEyebrow = useText("home.featured.eyebrow", "Best sellers");
+  const featuredTitle = useText("home.featured.title", "Featured Furniture");
+  const solutionsEyebrow = useText("home.solutions.eyebrow", "Complete workspace solutions");
+  const solutionsTitle = useText("home.solutions.title", "More Than Furniture. A Complete Workspace.");
+  const solutionsBody = useText(
+    "home.solutions.body",
+    "From individual furniture pieces to complete office environments, we help businesses create practical, professional and welcoming workspaces.",
+  );
+  const servicesEyebrow = useText("home.services.eyebrow", "Services");
+  const servicesTitle = useText("home.services.title", "Everything You Need to Build Your Workspace");
+  const projectsEyebrow = useText("home.projects.eyebrow", "Featured projects");
+  const projectsTitle = useText("home.projects.title", "Our Work");
+  const whyEyebrow = useText("home.why.eyebrow", "Why choose us");
+  const whyTitle = useText("home.why.title", "Built for working offices.");
 
   return (
     <>
@@ -127,8 +138,8 @@ function Home() {
       <section className="section-y">
         <div className="container-page">
           <SectionHeading
-            eyebrow="Shop by category"
-            title="Find the Right Furniture for Your Workspace"
+            eyebrow={categoriesEyebrow}
+            title={categoriesTitle}
             description="Explore furniture designed for every part of your office."
             action={
               <Button asChild variant="outline" size="sm">
@@ -136,6 +147,7 @@ function Home() {
               </Button>
             }
           />
+
 
           <div className="mt-12 grid gap-x-6 gap-y-12 md:grid-cols-6">
             {homeCategories.map((category, i) => (
@@ -165,8 +177,8 @@ function Home() {
       <section className="hairline-t section-y bg-surface">
         <div className="container-page">
           <SectionHeading
-            eyebrow="Best sellers"
-            title="Featured Furniture"
+            eyebrow={featuredEyebrow}
+            title={featuredTitle}
             description="Explore some of our most popular office furniture."
             action={
               <Button asChild variant="outline" size="sm">
@@ -195,13 +207,10 @@ function Home() {
             />
           </div>
           <div>
-            <p className="eyebrow">Complete workspace solutions</p>
-            <h2 className="display-lg mt-4 text-balance">
-              More Than Furniture. <span className="italic text-clay">A Complete Workspace.</span>
-            </h2>
+            <p className="eyebrow">{solutionsEyebrow}</p>
+            <h2 className="display-lg mt-4 text-balance">{solutionsTitle}</h2>
             <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground">
-              From individual furniture pieces to complete office environments, we help businesses
-              create practical, professional and welcoming workspaces.
+              {solutionsBody}
             </p>
             <div className="mt-10">
               <Button asChild size="lg">
@@ -219,8 +228,8 @@ function Home() {
       <section className="hairline-t section-y">
         <div className="container-page">
           <SectionHeading
-            eyebrow="Services"
-            title="Everything You Need to Build Your Workspace"
+            eyebrow={servicesEyebrow}
+            title={servicesTitle}
             description="Planning, supply, installation and clearance — handled by one team."
           />
           <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
@@ -255,8 +264,8 @@ function Home() {
       <section className="hairline-t section-y bg-surface">
         <div className="container-page">
           <SectionHeading
-            eyebrow="Featured projects"
-            title="Our Work"
+            eyebrow={projectsEyebrow}
+            title={projectsTitle}
             description="See how we transform offices into functional and professional workspaces."
             action={
               <Button asChild variant="outline" size="sm">
@@ -285,7 +294,7 @@ function Home() {
       {/* ---------------- why choose us ---------------- */}
       <section className="section-y">
         <div className="container-page">
-          <SectionHeading eyebrow="Why choose us" title="Built for working offices." />
+          <SectionHeading eyebrow={whyEyebrow} title={whyTitle} />
           <div className="mt-12 grid gap-10 md:grid-cols-2 lg:grid-cols-4">
             {benefits.map((benefit) => (
               <div key={benefit.title} className="border-t border-hairline pt-6">
@@ -307,28 +316,33 @@ function Home() {
 /* -------------------------------------------------- sections */
 
 function Hero() {
+  const eyebrow = useText("home.hero.eyebrow", "Office Furniture & Workspace Solutions");
+  const title = useText("home.hero.title", "Equip Your Workspace. Elevate Your Business.");
+  const subtitle = useText(
+    "home.hero.subtitle",
+    "Premium office furniture and complete workspace solutions designed for modern businesses.",
+  );
+  const ctaPrimary = useText("home.hero.cta_primary", "Shop Furniture");
+  const ctaSecondary = useText("home.hero.cta_secondary", "Explore Our Projects");
+
   return (
     <section className="relative">
       <div className="container-page grid gap-10 pt-12 pb-14 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-16 lg:pt-16 lg:pb-20">
         <div>
-          <p className="eyebrow">Office Furniture &amp; Workspace Solutions</p>
-          <h1 className="display-xl mt-6 text-balance">
-            Equip Your Workspace.
-            <span className="block italic text-clay">Elevate Your Business.</span>
-          </h1>
+          <p className="eyebrow">{eyebrow}</p>
+          <h1 className="display-xl mt-6 text-balance">{title}</h1>
           <p className="mt-8 max-w-md text-base leading-relaxed text-muted-foreground">
-            Premium office furniture and complete workspace solutions designed for modern
-            businesses.
+            {subtitle}
           </p>
           <div className="mt-10 flex flex-wrap gap-3">
             <Button asChild size="lg">
               <Link to="/shop">
-                Shop Furniture
+                {ctaPrimary}
                 <ArrowRight className="size-4 rtl:rotate-180" />
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline">
-              <Link to="/projects">Explore Our Projects</Link>
+              <Link to="/projects">{ctaSecondary}</Link>
             </Button>
           </div>
         </div>
@@ -368,20 +382,28 @@ function ValueStrip() {
 }
 
 function ProjectCTA() {
+  const whatsapp = useWhatsappLink();
+  const eyebrow = useText("cta.eyebrow", "Start a project");
+  const title = useText("cta.title", "Planning a New Office?");
+  const description = useText(
+    "cta.description",
+    "Tell us about your space and let us help you create the right workspace.",
+  );
+
   return (
     <section className="bg-primary text-primary-foreground">
       <div className="container-page section-y">
         <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-end">
           <div>
-            <p className="eyebrow text-primary-foreground/60">Start a project</p>
-            <h2 className="display-lg mt-4 text-balance">Planning a New Office?</h2>
+            <p className="eyebrow text-primary-foreground/60">{eyebrow}</p>
+            <h2 className="display-lg mt-4 text-balance">{title}</h2>
             <p className="mt-6 max-w-xl text-sm leading-relaxed text-primary-foreground/70">
-              Tell us about your space and let us help you create the right workspace.
+              {description}
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
             <Button asChild variant="clay" size="lg">
-              <a href={whatsappLink()} target="_blank" rel="noreferrer">
+              <a href={whatsapp} target="_blank" rel="noreferrer">
                 <MessageCircle className="size-4" />
                 WhatsApp Us
               </a>
@@ -406,6 +428,8 @@ function ProjectCTA() {
 
 function QuickInquiry() {
   const [submitting, setSubmitting] = React.useState(false);
+  const company = useCompany();
+  const whatsapp = useWhatsappLink();
 
   return (
     <section className="section-y" id="inquiry">
@@ -420,37 +444,35 @@ function QuickInquiry() {
           <ul className="mt-10 space-y-4">
             <li>
               <a
-                href={whatsappLink()}
+                href={whatsapp}
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center gap-3 text-sm hover:text-clay"
               >
                 <MessageCircle className="size-4 shrink-0 text-clay" />
-                WhatsApp — {COMPANY.phone}
+                WhatsApp — {company.phone}
               </a>
             </li>
             <li>
               <a
-                href={`tel:${COMPANY.phone.replace(/[^+\d]/g, "")}`}
+                href={`tel:${company.phone.replace(/[^+\d]/g, "")}`}
                 className="flex items-center gap-3 text-sm hover:text-clay"
               >
                 <Phone className="size-4 shrink-0 text-clay" />
-                {COMPANY.phone}
+                {company.phone}
               </a>
             </li>
             <li>
               <a
-                href={`mailto:${COMPANY.email}`}
+                href={`mailto:${company.email}`}
                 className="flex items-center gap-3 text-sm hover:text-clay"
               >
                 <Mail className="size-4 shrink-0 text-clay" />
-                {COMPANY.email}
+                {company.email}
               </a>
             </li>
           </ul>
-          <p className="mt-6 text-xs text-muted-foreground">
-            Demo contact details — replace with your live business information.
-          </p>
+
         </div>
 
         <form

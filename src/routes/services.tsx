@@ -5,7 +5,8 @@ import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { ServiceCard } from "@/components/site/cards";
 import { CTASection } from "@/components/site/CTASection";
 import { SectionHeading } from "@/components/site/SectionHeading";
-import { services } from "@/data/catalog";
+import { useCms } from "@/lib/cms";
+import { useLocale } from "@/lib/i18n";
 import heroImg from "@/assets/hero-office.jpg";
 
 const process = [
@@ -35,13 +36,16 @@ export const Route = createFileRoute("/services")({
 });
 
 function Services() {
+  const { services } = useCms();
+  const { t } = useLocale();
+
   return (
     <>
       <section className="container-page pt-8 pb-16">
-        <Breadcrumbs items={[{ label: "Services" }]} />
+        <Breadcrumbs items={[{ label: t("nav.services") }]} />
         <div className="mt-8 grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:items-end">
           <div>
-            <p className="eyebrow">Services</p>
+            <p className="eyebrow">{t("nav.services")}</p>
             <h1 className="display-lg mt-4 text-balance">
               One team from empty floor to first working day.
             </h1>

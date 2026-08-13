@@ -5,7 +5,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { ProjectCard } from "@/components/site/cards";
 import { CTASection } from "@/components/site/CTASection";
-import { projects, projectTypes } from "@/data/catalog";
+import { useCms } from "@/lib/cms";
+import { useLocale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/projects")({
@@ -28,13 +29,16 @@ export const Route = createFileRoute("/projects")({
 });
 
 function Projects() {
+  const { projects } = useCms();
+  const { t } = useLocale();
   const [filter, setFilter] = React.useState<string>("All");
+  const projectTypes = Array.from(new Set(projects.map((p) => p.type))).filter(Boolean);
   const list = filter === "All" ? projects : projects.filter((p) => p.type === filter);
 
   return (
     <>
       <section className="container-page pt-8 pb-12">
-        <Breadcrumbs items={[{ label: "Projects" }]} />
+        <Breadcrumbs items={[{ label: t("nav.projects") }]} />
         <div className="mt-8 grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:items-end">
           <div>
             <p className="eyebrow">Selected work</p>

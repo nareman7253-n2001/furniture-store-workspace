@@ -9,30 +9,38 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getCategory, getProductBySlug, relatedProducts } from "@/lib/catalog";
 import type { Product } from "@/data/catalog";
-import { COMPANY, whatsappLink } from "@/lib/company";
+import { COMPANY } from "@/lib/company";
+import { localizeProduct, useCms, useCompany, useWhatsappLink } from "@/lib/cms";
+import { getPublicProduct } from "@/lib/product.functions";
 import { useCart } from "@/lib/cart";
-import { formatPrice } from "@/lib/i18n";
+import { useLocale } from "@/lib/i18n";
 
 export const Route = createFileRoute("/shop/$slug")({
-  loader: ({ params }) => {
-    const product = getProductBySlug(params.slug);
-    if (!product) throw notFound();
-    return { product };
+  loader: async ({ params }) => {
+    const row = await getPublicProduct({ data: { slug: params.slug } });
+    if (!row) {
+      // fall back to the bundled catalogue while the database is being populated
+      const staticProduct = getProductBySlug(params.slug);
+      if (!staticProduct) throw notFound();
+      return { seo: { name: staticProduct.name, description: staticProduct.description }, row: null };
+    }
+    return {
+      seo: { name: row.name_en || row.slug, description: row.description_en },
+      row,
+    };
   },
   head: ({ loaderData }) => {
     if (!loaderData) {
-      return {
-        meta: [{ title: "Product not found" }, { name: "robots", content: "noindex" }],
-      };
+      return { meta: [{ title: "Product not found" }, { name: "robots", content: "noindex" }] };
     }
-    const { product } = loaderData;
-    const title = `${product.name} — Office Furniture | ${COMPANY.name}`;
+    const { seo } = loaderData;
+    const title = `${seo.name} — Office Furniture | ${COMPANY.name}`;
     return {
       meta: [
         { title },
-        { name: "description", content: product.description },
+        { name: "description", content: seo.description },
         { property: "og:title", content: title },
-        { property: "og:description", content: product.description },
+        { property: "og:description", content: seo.description },
         { property: "og:type", content: "product" },
         { name: "twitter:card", content: "summary_large_image" },
       ],
@@ -58,17 +66,41 @@ export const Route = createFileRoute("/shop/$slug")({
 });
 
 function ProductDetail() {
-  const { product } = Route.useLoaderData() as { product: Product };
+  const { slug } = Route.useParams();
+  const { row } = Route.useLoaderData();
+  const { products, categories } = useCms();
   const { add } = useCart();
-  const category = getCategory(product.category);
-  const related = relatedProducts(product, 3);
+  const { locale, price: formatPrice, t } = useLocale();
+  const company = useCompany();
+
+  const product: Product | undefined =
+    products.find((p) => p.slug === slug) ??
+    (row ? localizeProduct(row, locale) : getProductBySlug(slug));
+
+  const whatsapp = useWhatsappLink(
+    product ? `Hello ${company.name}, I'd like a quote for the ${product.name}.` : undefined,
+  );
+
+  if (!product) {
+    return (
+      <div className="container-page py-24 text-center">
+        <p className="font-display text-2xl">Product not found</p>
+        <Button variant="outline" size="sm" className="mt-6" asChild>
+          <Link to="/shop">Back to the shop</Link>
+        </Button>
+      </div>
+    );
+  }
+
+  const category = getCategory(product.category, categories);
+  const related = relatedProducts(product, 3, products);
 
   return (
     <>
       <section className="container-page pt-8 pb-16">
         <Breadcrumbs
           items={[
-            { label: "Shop", to: "/shop" },
+            { label: t("nav.shop"), to: "/shop" },
             ...(category ? [{ label: category.name }] : []),
             { label: product.name },
           ]}
@@ -103,14 +135,10 @@ function ProductDetail() {
             </p>
 
             <div className="mt-8 flex flex-wrap gap-4">
-              <Button onClick={() => add(product)}>Add to cart</Button>
+              <Button onClick={() => add(product)}>{t("action.addToCart")}</Button>
               <Button variant="outline" asChild>
-                <a
-                  href={whatsappLink(`Hello ${COMPANY.name}, I'd like a quote for the ${product.name}.`)}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Request a quote
+                <a href={whatsapp} target="_blank" rel="noreferrer">
+                  {t("action.requestQuote")}
                 </a>
               </Button>
             </div>
@@ -124,18 +152,22 @@ function ProductDetail() {
                   <dd className="mt-1 text-sm">{spec.value}</dd>
                 </div>
               ))}
-              <div>
-                <dt className="text-xs uppercase tracking-[0.12em] text-muted-foreground">
-                  Finishes
-                </dt>
-                <dd className="mt-1 text-sm">{product.colorways.join(", ")}</dd>
-              </div>
-              <div>
-                <dt className="text-xs uppercase tracking-[0.12em] text-muted-foreground">
-                  Material
-                </dt>
-                <dd className="mt-1 text-sm">{product.material}</dd>
-              </div>
+              {product.colorways.length ? (
+                <div>
+                  <dt className="text-xs uppercase tracking-[0.12em] text-muted-foreground">
+                    Finishes
+                  </dt>
+                  <dd className="mt-1 text-sm">{product.colorways.join(", ")}</dd>
+                </div>
+              ) : null}
+              {product.material ? (
+                <div>
+                  <dt className="text-xs uppercase tracking-[0.12em] text-muted-foreground">
+                    Material
+                  </dt>
+                  <dd className="mt-1 text-sm">{product.material}</dd>
+                </div>
+              ) : null}
             </dl>
           </div>
         </div>
