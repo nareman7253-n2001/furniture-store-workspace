@@ -428,6 +428,8 @@ function ProjectCTA() {
 
 function QuickInquiry() {
   const [submitting, setSubmitting] = React.useState(false);
+  const company = useCompany();
+  const whatsapp = useWhatsappLink();
 
   return (
     <section className="section-y" id="inquiry">
@@ -442,37 +444,35 @@ function QuickInquiry() {
           <ul className="mt-10 space-y-4">
             <li>
               <a
-                href={whatsappLink()}
+                href={whatsapp}
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center gap-3 text-sm hover:text-clay"
               >
                 <MessageCircle className="size-4 shrink-0 text-clay" />
-                WhatsApp — {COMPANY.phone}
+                WhatsApp — {company.phone}
               </a>
             </li>
             <li>
               <a
-                href={`tel:${COMPANY.phone.replace(/[^+\d]/g, "")}`}
+                href={`tel:${company.phone.replace(/[^+\d]/g, "")}`}
                 className="flex items-center gap-3 text-sm hover:text-clay"
               >
                 <Phone className="size-4 shrink-0 text-clay" />
-                {COMPANY.phone}
+                {company.phone}
               </a>
             </li>
             <li>
               <a
-                href={`mailto:${COMPANY.email}`}
+                href={`mailto:${company.email}`}
                 className="flex items-center gap-3 text-sm hover:text-clay"
               >
                 <Mail className="size-4 shrink-0 text-clay" />
-                {COMPANY.email}
+                {company.email}
               </a>
             </li>
           </ul>
-          <p className="mt-6 text-xs text-muted-foreground">
-            Demo contact details — replace with your live business information.
-          </p>
+
         </div>
 
         <form
