@@ -4,7 +4,8 @@ import { MessageCircle } from "lucide-react";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { ContactForm } from "@/components/site/ContactForm";
 import { Button } from "@/components/ui/button";
-import { COMPANY, whatsappLink } from "@/lib/company";
+import { COMPANY } from "@/lib/company";
+import { useCompany, useWhatsappLink } from "@/lib/cms";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -26,6 +27,9 @@ export const Route = createFileRoute("/contact")({
 });
 
 function Contact() {
+  const COMPANY = useCompany();
+  const whatsapp = useWhatsappLink();
+
   return (
     <>
       <section className="container-page pt-8 pb-14">
@@ -77,7 +81,7 @@ function Contact() {
                 </p>
               </div>
               <Button asChild variant="clay" className="mt-6 w-full sm:w-auto">
-                <a href={whatsappLink()} target="_blank" rel="noreferrer">
+                <a href={whatsapp} target="_blank" rel="noreferrer">
                   <MessageCircle className="size-4" />
                   Chat on WhatsApp
                 </a>
