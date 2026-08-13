@@ -14,17 +14,17 @@ import {
   CONDITIONS,
   SORT_OPTIONS,
   getCategory,
-  listCategories,
   priceBounds,
   queryProducts,
   type SortKey,
 } from "@/lib/catalog";
+import type { Category } from "@/data/catalog";
 import { COMPANY } from "@/lib/company";
-import { formatPrice } from "@/lib/i18n";
+import { useCms } from "@/lib/cms";
+import { useLocale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import type { ShopSearch } from "./shop";
 
-const bounds = priceBounds();
 
 export const Route = createFileRoute("/shop/")({
   head: () => ({
