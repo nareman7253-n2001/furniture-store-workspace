@@ -19,7 +19,6 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { CMS_QUERY_KEY, fetchCmsRaw } from "@/lib/cms";
-import { BUNDLED_IMAGE_KEYS } from "@/lib/assets";
 import { ImageField, ImageListField, ImageRefsContext } from "@/components/admin/ImageUploader";
 import { collectImageReferences, type UploadFolder } from "@/lib/uploads";
 import { LOCALES, LOCALE_META } from "@/lib/i18n";
