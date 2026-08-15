@@ -20,6 +20,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { CMS_QUERY_KEY, fetchCmsRaw } from "@/lib/cms";
 import { BUNDLED_IMAGE_KEYS } from "@/lib/assets";
+import { ImageField, ImageListField, ImageRefsContext } from "@/components/admin/ImageUploader";
+import { collectImageReferences, type UploadFolder } from "@/lib/uploads";
 import { LOCALES, LOCALE_META } from "@/lib/i18n";
 
 export const Route = createFileRoute("/admin")({
@@ -37,7 +39,7 @@ export const Route = createFileRoute("/admin")({
 
 /* -------------------------------------------------- field spec */
 
-type FieldType = "text" | "textarea" | "number" | "bool" | "image" | "list" | "json";
+type FieldType = "text" | "textarea" | "number" | "bool" | "image" | "images" | "list" | "json";
 
 interface Field {
   name: string;
@@ -47,6 +49,8 @@ interface Field {
   i18n?: boolean;
   /** i18n list (points_en, points_he …). */
   i18nList?: boolean;
+  /** Storage folder for image uploads. */
+  folder?: UploadFolder;
 }
 
 interface TableSpec {
@@ -68,7 +72,7 @@ const SPECS: TableSpec[] = [
       { name: "slug", label: "Slug" },
       { name: "name", label: "Name", i18n: true },
       { name: "description", label: "Description", i18n: true, type: "textarea" },
-      { name: "image", label: "Image", type: "image" },
+      { name: "image", label: "Image", type: "image", folder: "categories" },
       { name: "sort", label: "Order", type: "number" },
       { name: "active", label: "Visible", type: "bool" },
     ],
@@ -89,7 +93,7 @@ const SPECS: TableSpec[] = [
       { name: "compare_at", label: "Compare-at price", type: "number" },
       { name: "condition", label: "Condition (New / Used)" },
       { name: "availability", label: "Availability (In stock / Made to order)" },
-      { name: "images", label: "Images", type: "list" },
+      { name: "images", label: "Images", type: "images", folder: "products" },
       { name: "specifications", label: "Specifications (JSON list of {label, value})", type: "json" },
       { name: "material", label: "Material" },
       { name: "colorways", label: "Colourways", type: "list" },
@@ -143,7 +147,7 @@ const SPECS: TableSpec[] = [
       { name: "year", label: "Year" },
       { name: "scope", label: "Scope", i18n: true, type: "textarea" },
       { name: "metric", label: "Metric" , i18n: true },
-      { name: "image", label: "Image", type: "image" },
+      { name: "image", label: "Image", type: "image", folder: "projects" },
       { name: "sort", label: "Order", type: "number" },
       { name: "active", label: "Visible", type: "bool" },
     ],
@@ -223,23 +227,10 @@ function FieldInput({
     );
   }
   if (type === "image") {
-    return (
-      <div className="space-y-2">
-        <Input value={value ?? ""} onChange={(e) => onChange(e.target.value)} />
-        <div className="flex flex-wrap gap-1">
-          {BUNDLED_IMAGE_KEYS.map((key) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => onChange(key)}
-              className="cursor-pointer border border-hairline px-2 py-1 text-[0.625rem] text-muted-foreground hover:border-foreground hover:text-foreground"
-            >
-              {key}
-            </button>
-          ))}
-        </div>
-      </div>
-    );
+    return <ImageField value={value ?? ""} onChange={onChange} folder={field.folder ?? "branding"} />;
+  }
+  if (type === "images") {
+    return <ImageListField value={value ?? []} onChange={onChange} folder={field.folder ?? "products"} />;
   }
   return <Input id={name} value={value ?? ""} onChange={(e) => onChange(e.target.value)} />;
 }
@@ -431,6 +422,7 @@ function AdminPage() {
           <Loader2 className="size-5 animate-spin text-muted-foreground" />
         </div>
       ) : (
+        <ImageRefsContext.Provider value={collectImageReferences(data)}>
         <Tabs defaultValue="company" className="mt-10">
           <TabsList className="flex-wrap">
             <TabsTrigger value="company">Company</TabsTrigger>
@@ -516,6 +508,7 @@ function AdminPage() {
             );
           })}
         </Tabs>
+        </ImageRefsContext.Provider>
       )}
     </div>
   );
