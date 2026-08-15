@@ -19,6 +19,7 @@ import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as ShopIndexRouteImport } from './routes/shop.index'
 import { Route as ShopSlugRouteImport } from './routes/shop.$slug'
+import { Route as ApiPublicCmsImageSplatRouteImport } from './routes/api/public/cms-image.$'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -70,6 +71,11 @@ const ShopSlugRoute = ShopSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => ShopRoute,
 } as any)
+const ApiPublicCmsImageSplatRoute = ApiPublicCmsImageSplatRouteImport.update({
+  id: '/api/public/cms-image/$',
+  path: '/api/public/cms-image/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -82,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/shop': typeof ShopRouteWithChildren
   '/shop/$slug': typeof ShopSlugRoute
   '/shop/': typeof ShopIndexRoute
+  '/api/public/cms-image/$': typeof ApiPublicCmsImageSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -93,6 +100,7 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesRoute
   '/shop/$slug': typeof ShopSlugRoute
   '/shop': typeof ShopIndexRoute
+  '/api/public/cms-image/$': typeof ApiPublicCmsImageSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -106,6 +114,7 @@ export interface FileRoutesById {
   '/shop': typeof ShopRouteWithChildren
   '/shop/$slug': typeof ShopSlugRoute
   '/shop/': typeof ShopIndexRoute
+  '/api/public/cms-image/$': typeof ApiPublicCmsImageSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -120,6 +129,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/shop/$slug'
     | '/shop/'
+    | '/api/public/cms-image/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -131,6 +141,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/shop/$slug'
     | '/shop'
+    | '/api/public/cms-image/$'
   id:
     | '__root__'
     | '/'
@@ -143,6 +154,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/shop/$slug'
     | '/shop/'
+    | '/api/public/cms-image/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -154,6 +166,7 @@ export interface RootRouteChildren {
   ProjectsRoute: typeof ProjectsRoute
   ServicesRoute: typeof ServicesRoute
   ShopRoute: typeof ShopRouteWithChildren
+  ApiPublicCmsImageSplatRoute: typeof ApiPublicCmsImageSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -228,6 +241,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShopSlugRouteImport
       parentRoute: typeof ShopRoute
     }
+    '/api/public/cms-image/$': {
+      id: '/api/public/cms-image/$'
+      path: '/api/public/cms-image/$'
+      fullPath: '/api/public/cms-image/$'
+      preLoaderRoute: typeof ApiPublicCmsImageSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -252,6 +272,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProjectsRoute: ProjectsRoute,
   ServicesRoute: ServicesRoute,
   ShopRoute: ShopRouteWithChildren,
+  ApiPublicCmsImageSplatRoute: ApiPublicCmsImageSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
